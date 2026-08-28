@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Seite nicht gefunden | HausaufgabenPlaner{% endblock %}
+{% block meta_description %}Die angeforderte Seite wurde im HausaufgabenPlaner nicht gefunden.{% endblock %}
+{% block content %}
+<section class="panel auth error-page">
+  <p class="eyebrow">404</p>
+  <h1>Seite nicht gefunden</h1>
+  <p>Die angeforderte Seite existiert nicht oder wurde verschoben.</p>
+  <a class="link-button" href="{{ url_for('dashboard') if session.get('logged_in') else url_for('login') }}">Zur Startseite</a>
+</section>
+{% endblock %}

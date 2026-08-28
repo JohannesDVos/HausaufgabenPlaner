@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="de" data-theme="{{ theme.active if theme is defined else 'midnight' }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="{% block meta_description %}HausaufgabenPlaner ist eine lokale WebApp für Aufgaben, Kalender und Stundenplan mit geschütztem Login.{% endblock %}">
+  <title>{% block title %}HausaufgabenPlaner{% endblock %}</title>
+  <meta name="theme-color" content="{{ theme.accent if theme is defined else '#38bdf8' }}">
+  <link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" type="image/svg+xml">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css', v='20260828-1') }}">
+</head>
+<body>
+  <main class="shell">
+    {% block content %}{% endblock %}
+  </main>
+  <script>
+    (function () {
+      const toggles = document.querySelectorAll("[data-menu-toggle]");
+      toggles.forEach((toggle) => {
+        const target = document.getElementById(toggle.getAttribute("aria-controls"));
+        if (!target) return;
+        toggle.addEventListener("click", () => {
+          const expanded = toggle.getAttribute("aria-expanded") === "true";
+          toggle.setAttribute("aria-expanded", String(!expanded));
+          target.classList.toggle("is-open", !expanded);
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

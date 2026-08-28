@@ -1,0 +1,216 @@
+{% extends "base.html" %}
+{% block title %}Dashboard | HausaufgabenPlaner{% endblock %}
+{% block meta_description %}Dashboard für offene Aufgaben, Termine, Kalender und Stundenplan im HausaufgabenPlaner.{% endblock %}
+{% block content %}
+<header class="topbar">
+  <div class="brand">
+    <div>
+      <h1>HausaufgabenPlaner</h1>
+    </div>
+  </div>
+  <button class="menu-toggle" type="button" aria-controls="main-menu" aria-expanded="false" data-menu-toggle>Menü</button>
+  <div class="topbar-actions" id="main-menu">
+    <a class="link-button" href="{{ url_for('settings') }}">Einstellungen</a>
+    <a class="logout" href="{{ url_for('logout') }}">Logout</a>
+  </div>
+</header>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="alerts">
+      {% for category, message in messages %}
+        <div class="alert {{ category }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<section class="stats">
+  <article><strong>{{ tasks|length }}</strong><span>offene Aufgaben</span></article>
+  <article><strong>{{ overdue }}</strong><span>überfällige Aufgaben</span></article>
+  <article><strong>{{ due_soon }}</strong><span>fällig in 7 Tagen</span></article>
+  <article><strong>{{ events|length }}</strong><span>Termine</span></article>
+</section>
+
+<section class="grid">
+  <div class="panel">
+    <div class="panel-head">
+      <h2>Neue Aufgabe</h2>
+    </div>
+    <form method="post" action="{{ url_for('add_task') }}" class="form-grid" id="task-form">
+      <label class="field">Titel
+        <input name="title" required>
+      </label>
+      <label class="field">Fach
+        <select name="subject" id="task-subject" required>
+          <option value="" selected disabled>Fach wählen</option>
+          {% for subject in subjects %}
+            <option value="{{ subject.name }}">{{ subject.name }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label class="field">Priorität
+        <select name="priority">
+          <option value="1">Niedrig</option>
+          <option value="2" selected>Normal</option>
+          <option value="3">Hoch</option>
+          <option value="4">Sehr hoch</option>
+        </select>
+      </label>
+      <label class="field">Hinzugefügt am
+        <input type="date" name="created_on" value="{{ today.isoformat() }}">
+      </label>
+      <label class="field">Fällig bis
+        <input type="date" name="due_on" id="task-due-on" required>
+      </label>
+      <input type="hidden" name="suggested_due_on" id="suggested-due-on">
+      <button type="submit">Speichern</button>
+    </form>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <h2>Neuer Termin</h2>
+    </div>
+    <form method="post" action="{{ url_for('add_event') }}" class="form-grid">
+      <label class="field">Titel
+        <input name="title" required>
+      </label>
+      <label class="field">Fach
+        <select name="subject" required>
+          {% for subject in subjects %}
+            <option value="{{ subject.name }}">{{ subject.name }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label class="field">Datum
+        <input type="date" name="event_date" required>
+      </label>
+      <label class="field">Art
+        <select name="event_type">
+          <option>Klausur</option>
+          <option>Arbeit</option>
+          <option>Test</option>
+          <option>Sonstiges</option>
+        </select>
+      </label>
+      <label class="field">Notizen
+        <input name="notes">
+      </label>
+      <button type="submit">Eintragen</button>
+    </form>
+  </div>
+</section>
+
+<section class="grid">
+  <div class="panel panel-wide">
+    <div class="panel-head">
+      <h2>Offene Aufgaben</h2>
+    </div>
+    <div class="list">
+      {% for task in tasks %}
+        <article class="item">
+          <div>
+            <div class="item-title">
+              <span class="badge" style="background: {{ subject_colors.get(task.subject, '#64748b') }}"></span>
+              {{ task.title }}
+            </div>
+            <p>{{ task.subject }} · erstellt {{ task.created_on }} · fällig {{ task.due_on }}</p>
+          </div>
+          <div class="actions">
+            <span class="prio p{{ task.priority }}">P{{ task.priority }}</span>
+            <form method="post" action="{{ url_for('toggle_task', task_id=task.id) }}">
+              <button type="submit">{% if task.completed %}Wieder offen{% else %}Erledigt{% endif %}</button>
+            </form>
+            <form method="post" action="{{ url_for('delete_task', task_id=task.id) }}">
+              <button type="submit" class="danger">Löschen</button>
+            </form>
+          </div>
+        </article>
+      {% else %}
+        <p>Keine offenen Aufgaben.</p>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="panel panel-wide">
+    <div class="panel-head">
+      <h2>Termine</h2>
+    </div>
+    <div class="list">
+      {% for event in events %}
+        <article class="item">
+          <div>
+            <div class="item-title">
+              <span class="badge" style="background: {{ subject_colors.get(event.subject, '#64748b') }}"></span>
+              {{ event.title }}
+            </div>
+            <p>{{ event.subject }} · {{ event.event_type }} · {{ event.event_date }}</p>
+            {% if event.notes %}<small>{{ event.notes }}</small>{% endif %}
+          </div>
+          <form method="post" action="{{ url_for('delete_event', event_id=event.id) }}" class="item-actions">
+            <button type="submit" class="danger">Löschen</button>
+          </form>
+        </article>
+      {% else %}
+        <p>Keine Termine vorhanden.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="grid">
+  <div class="panel panel-wide">
+    <div class="panel-head">
+      <h2>Stundenplan</h2>
+    </div>
+    <div class="timetable">
+      <div class="timetable-head">
+        <span>Stunde</span>
+        {% for day in timetable.weekdays %}
+          <span>{{ day }}</span>
+        {% endfor %}
+      </div>
+      {% for period in timetable.periods %}
+        <div class="timetable-row">
+          <span class="period-cell">
+            <strong>{{ period.slot }}</strong>
+            <small>{{ period.start }}-{{ period.end }}</small>
+          </span>
+          {% for day in timetable.weekdays %}
+            {% set lesson = timetable.lessons | selectattr("day", "equalto", day) | selectattr("slot", "equalto", period.slot) | list | first %}
+            <span class="lesson" {% if lesson %}style="border-left-color: {{ subject_colors.get(lesson.subject, '#64748b') }}"{% endif %}>
+              {% if lesson %}
+                <strong>{{ lesson.subject }}</strong>
+                <small>{{ lesson.room }}</small>
+              {% endif %}
+            </span>
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<script>
+  (function () {
+    const subjectSelect = document.getElementById("task-subject");
+    const dueInput = document.getElementById("task-due-on");
+    const suggestedInput = document.getElementById("suggested-due-on");
+
+    async function updateDueDate() {
+      const subject = subjectSelect.value;
+      if (!subject) return;
+      const response = await fetch(`/api/next-due-date?subject=${encodeURIComponent(subject)}`, { credentials: "same-origin" });
+      if (!response.ok) return;
+      const data = await response.json();
+      if (data.due_on) {
+        dueInput.value = data.due_on;
+        suggestedInput.value = data.due_on;
+      }
+    }
+
+    subjectSelect.addEventListener("change", updateDueDate);
+  })();
+</script>
+{% endblock %}

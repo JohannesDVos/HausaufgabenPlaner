@@ -1,0 +1,56 @@
+{
+  "periods": [
+    {"slot": 1, "start": "7:50", "end": "8:35"},
+    {"slot": 2, "start": "8:40", "end": "9:25"},
+    {"slot": 3, "start": "9:45", "end": "10:30"},
+    {"slot": 4, "start": "10:30", "end": "11:15"},
+    {"slot": 5, "start": "11:35", "end": "12:20"},
+    {"slot": 6, "start": "12:25", "end": "13:10"},
+    {"slot": 7, "start": "13:25", "end": "14:10"},
+    {"slot": 8, "start": "14:10", "end": "14:55"},
+    {"slot": 9, "start": "15:00", "end": "15:45"}
+  ],
+  "weekdays": ["Mon", "Tue", "Wed", "Thu", "Fri"],
+  "lessons": [
+    {"day": "Mon", "slot": 1, "subject": "Deutsch", "room": ""},
+    {"day": "Mon", "slot": 2, "subject": "Chemie", "room": ""},
+    {"day": "Mon", "slot": 3, "subject": "Latein", "room": ""},
+    {"day": "Mon", "slot": 4, "subject": "Latein", "room": ""},
+    {"day": "Mon", "slot": 5, "subject": "Religion", "room": ""},
+    {"day": "Mon", "slot": 6, "subject": "Erdkunde", "room": ""},
+    {"day": "Mon", "slot": 7, "subject": "Erdkunde", "room": ""},
+
+    {"day": "Tue", "slot": 1, "subject": "Deutsch", "room": ""},
+    {"day": "Tue", "slot": 2, "subject": "Deutsch", "room": ""},
+    {"day": "Tue", "slot": 3, "subject": "Englisch", "room": ""},
+    {"day": "Tue", "slot": 4, "subject": "Englisch", "room": ""},
+    {"day": "Tue", "slot": 5, "subject": "Chemie", "room": ""},
+    {"day": "Tue", "slot": 6, "subject": "Latein", "room": ""},
+    {"day": "Tue", "slot": 7, "subject": "Religion", "room": ""},
+
+    {"day": "Wed", "slot": 1, "subject": "Mathe", "room": ""},
+    {"day": "Wed", "slot": 2, "subject": "Latein", "room": ""},
+    {"day": "Wed", "slot": 3, "subject": "Wirtschafts-Politik", "room": ""},
+    {"day": "Wed", "slot": 4, "subject": "Wirtschafts-Politik", "room": ""},
+    {"day": "Wed", "slot": 5, "subject": "Französisch", "room": ""},
+    {"day": "Wed", "slot": 6, "subject": "Französisch", "room": ""},
+    {"day": "Wed", "slot": 8, "subject": "Orchester", "room": ""},
+    {"day": "Wed", "slot": 9, "subject": "Orchester", "room": ""},
+
+    {"day": "Thu", "slot": 1, "subject": "Sport", "room": ""},
+    {"day": "Thu", "slot": 2, "subject": "Sport", "room": ""},
+    {"day": "Thu", "slot": 3, "subject": "Mathe", "room": ""},
+    {"day": "Thu", "slot": 4, "subject": "Mathe", "room": ""},
+    {"day": "Thu", "slot": 5, "subject": "Geschichte", "room": ""},
+    {"day": "Thu", "slot": 6, "subject": "Geschichte", "room": ""},
+    {"day": "Thu", "slot": 7, "subject": "Musik", "room": ""},
+
+    {"day": "Fri", "slot": 1, "subject": "Gottesdienst / OS", "room": ""},
+    {"day": "Fri", "slot": 2, "subject": "Französisch", "room": ""},
+    {"day": "Fri", "slot": 3, "subject": "Biologie", "room": ""},
+    {"day": "Fri", "slot": 4, "subject": "Biologie", "room": ""},
+    {"day": "Fri", "slot": 5, "subject": "Englisch", "room": ""},
+    {"day": "Fri", "slot": 6, "subject": "Musik", "room": ""},
+    {"day": "Fri", "slot": 7, "subject": "Französisch", "room": ""}
+  ]
+}

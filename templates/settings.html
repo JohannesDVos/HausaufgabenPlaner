@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Einstellungen | HausaufgabenPlaner{% endblock %}
+{% block meta_description %}Theme-Einstellungen für den lokalen HausaufgabenPlaner.{% endblock %}
+{% block content %}
+<header class="topbar">
+  <div class="brand">
+    <div>
+      <h1>Einstellungen</h1>
+    </div>
+  </div>
+  <button class="menu-toggle" type="button" aria-controls="settings-menu" aria-expanded="false" data-menu-toggle>Menü</button>
+  <div class="topbar-actions" id="settings-menu">
+    <a class="link-button" href="{{ url_for('dashboard') }}">Zurück</a>
+    <a class="logout" href="{{ url_for('logout') }}">Logout</a>
+  </div>
+</header>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="alerts">
+      {% for category, message in messages %}
+        <div class="alert {{ category }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<section class="grid">
+  <div class="panel panel-wide">
+    <div class="panel-head">
+      <h2>Theme auswählen</h2>
+    </div>
+    <form method="post" action="{{ url_for('update_theme') }}" class="theme-form">
+      {% for name, theme in themes.items() %}
+        <label class="theme-option">
+          <input type="radio" name="theme" value="{{ name }}" {% if active_theme == name %}checked{% endif %}>
+          <span class="theme-preview" data-preview="{{ name }}">
+            <strong>{{ name|capitalize }}</strong>
+            <small>{{ theme.accent }}</small>
+          </span>
+        </label>
+      {% endfor %}
+      <button type="submit">Theme speichern</button>
+    </form>
+  </div>
+</section>
+<script>
+  (function () {
+    const form = document.querySelector(".theme-form");
+    if (!form) return;
+    const radios = form.querySelectorAll('input[type="radio"][name="theme"]');
+    const sync = () => {
+      form.querySelectorAll(".theme-option").forEach((label) => {
+        label.classList.toggle("active", label.querySelector('input[type="radio"]:checked') !== null);
+      });
+    };
+    radios.forEach((radio) => radio.addEventListener("change", sync));
+    sync();
+  })();
+</script>
+{% endblock %}
