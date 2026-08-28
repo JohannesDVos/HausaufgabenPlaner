@@ -16,6 +16,11 @@ Mit der App kannst du:
 - zwischen mehreren Themes wechseln
 - die App mit Passwort schützen
 
+## Dank
+
+Danke an David M. Vos für die Idee und Inspiration zu diesem Projekt:
+[github.com/davidmvos/planerapp](https://github.com/davidmvos/planerapp)
+
 ## Funktionen im Detail
 
 ### Aufgaben
