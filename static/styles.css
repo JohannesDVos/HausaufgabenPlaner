@@ -262,7 +262,7 @@ button:hover,
   grid-column: span 12;
   min-width: 0;
   max-width: 100%;
-  overflow: hidden;
+  overflow: visible;
   padding: 20px;
 }
 
