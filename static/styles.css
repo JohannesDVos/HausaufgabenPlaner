@@ -329,20 +329,87 @@ textarea {
   min-height: 48px;
 }
 
+select {
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.simple-picker {
+  position: relative;
+}
+
+.simple-picker-toggle {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface-2);
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.simple-picker-toggle:hover,
+.simple-picker-toggle:focus-visible,
+.simple-picker.is-open .simple-picker-toggle {
+  border-color: var(--accent);
+}
+
+.simple-picker-menu {
+  position: absolute;
+  z-index: 10;
+  top: calc(100% + 6px);
+  left: 0;
+  display: none;
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface-2);
+  text-align: left;
+}
+
+.simple-picker.is-open .simple-picker-menu {
+  display: grid;
+  gap: 3px;
+}
+
+.simple-picker-option {
+  width: 100%;
+  min-height: 36px;
+  padding: 7px 9px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+
+}
+
+.simple-picker-option:hover,
+.simple-picker-option:focus-visible {
+  background: var(--surface);
+}
+
+.simple-picker-option.is-selected {
+  background: var(--accent-soft);
+  font-weight: 700;
+}
+
 .subject-picker {
   position: relative;
 }
 
 .subject-picker-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
   width: 100%;
   min-height: 48px;
   padding: 12px 14px;
   border: 1px solid var(--line);
-  border-radius: 14px;
+  border-radius: 8px;
   background: var(--surface-2);
   color: var(--text);
   font: inherit;
@@ -351,6 +418,7 @@ textarea {
 }
 
 .subject-picker-toggle:hover,
+.subject-picker-toggle:focus-visible,
 .subject-picker.is-open .subject-picker-toggle {
   border-color: var(--accent);
 }
@@ -359,32 +427,6 @@ textarea {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.subject-picker-value.has-selection {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.subject-picker-value.has-selection::before {
-  width: 9px;
-  height: 9px;
-  flex: 0 0 9px;
-  border-radius: 50%;
-  background: var(--subject-color, transparent);
-  content: "";
-}
-
-.subject-picker-chevron {
-  color: var(--muted);
-  font-size: 1.2rem;
-  line-height: 1;
-  transition: transform 0.2s ease;
-}
-
-.subject-picker.is-open .subject-picker-chevron {
-  transform: rotate(180deg);
 }
 
 .subject-picker-menu {
@@ -396,9 +438,8 @@ textarea {
   width: 100%;
   padding: 8px;
   border: 1px solid var(--line);
-  border-radius: 14px;
-  background: var(--surface);
-  box-shadow: 0 16px 35px rgb(0 0 0 / 25%);
+  border-radius: 8px;
+  background: var(--surface-2);
   text-align: left;
 }
 
@@ -408,10 +449,10 @@ textarea {
 
 .subject-picker-search {
   display: block;
-  min-height: 42px;
+  min-height: 40px;
   margin-bottom: 6px;
   padding: 9px 11px;
-  border-radius: 10px;
+  border-radius: 8px;
   text-align: left;
 }
 
@@ -425,12 +466,11 @@ textarea {
 .subject-picker-option {
   display: flex;
   align-items: center;
-  gap: 9px;
   width: 100%;
-  min-height: 40px;
-  padding: 8px 10px;
+  min-height: 36px;
+  padding: 7px 9px;
   border: 0;
-  border-radius: 9px;
+  border-radius: 6px;
   background: transparent;
   color: var(--text);
   font: inherit;
@@ -449,21 +489,8 @@ textarea {
   font-weight: 700;
 }
 
-.subject-picker-option.is-selected::after {
-  margin-left: auto;
-  color: var(--accent);
-  content: "✓";
-}
-
 .subject-picker-option[hidden] {
   display: none;
-}
-
-.subject-picker-dot {
-  width: 10px;
-  height: 10px;
-  flex: 0 0 10px;
-  border-radius: 50%;
 }
 
 .subject-picker-empty {
