@@ -1,101 +1,58 @@
 # HausaufgabenPlaner
 
-Eine selbst gehostete, passwortgeschützte Webanwendung zur Verwaltung von Hausaufgaben, Terminen, Kalender und Stundenplan – konzipiert für den Dauerbetrieb auf einem lokalen Rechner oder Raspberry Pi.
+Eine selbst gehostete, passwortgeschützte Webanwendung zur Verwaltung von **Hausaufgaben, Terminen, Kalender und Stundenplan**.
+
+Die Anwendung ist für den privaten Einsatz und den Dauerbetrieb auf einem lokalen Rechner oder Raspberry Pi ausgelegt. Alle Daten werden lokal gespeichert.
 
 > Inspiriert von [davidmvos/planerapp](https://github.com/davidmvos/planerapp) – Danke an David Vos.
-
----
-
-## Inhaltsverzeichnis
-
-- [Überblick](#überblick)
-- [Funktionen](#funktionen)
-- [Projektstruktur](#projektstruktur)
-- [Voraussetzungen](#voraussetzungen)
-- [Installation](#installation)
-- [Konfiguration](#konfiguration)
-- [Deployment](#deployment)
-- [Mobile Nutzung](#mobile-nutzung)
-- [Datensicherung](#datensicherung)
-
----
-
-## Überblick
-
-HausaufgabenPlaner ist eine lokale Single-User-Webanwendung auf Basis von Flask und SQLite. Alle Daten werden ausschließlich lokal gespeichert – ohne Cloud-Abhängigkeit, ohne externe Datenbank.
-
-**Kernfunktionen auf einen Blick:**
-
-- Aufgaben anlegen, bearbeiten und nach Priorität organisieren
-- Aufgaben Fächern zuordnen, mit automatischer Fristvorschlag anhand des nächsten Fachtermins
-- Klassenarbeiten und Prüfungen im Kalender erfassen
-- Stundenplan hinterlegen und farblich visualisieren
-- Mehrere visuelle Themes auswählen
-- Passwortgeschützter Zugriff mit Session-Schutz
 
 ---
 
 ## Funktionen
 
 ### Aufgaben
-
-- Erfassung mit Titel, Fach, Priorität, Erstell- und Fälligkeitsdatum
-- Übersicht offener Aufgaben, sortiert nach Dringlichkeit
-- Löschen einzelner Einträge
+- Aufgaben erstellen, bearbeiten und löschen
+- Zuordnung zu Fächern
+- Prioritäten und Fälligkeitsdaten
+- Automatischer Fristvorschlag anhand des Stundenplans
+- Übersicht der offenen Aufgaben
 
 ### Kalender
-
-- Eintragen von Klassenarbeiten, Prüfungen und sonstigen Terminen
-- Kompakte Übersicht anstehender Ereignisse
+- Klassenarbeiten und Prüfungen
+- Sonstige Termine
+- Übersicht anstehender Ereignisse
 
 ### Stundenplan
-
+- Individuell konfigurierbarer Stundenplan
+- Fächer, Räume und Wochentage
+- Individuelle Fachfarben
 - Konfiguration über `config/timetable.json`
-- Wochenübersicht mit Fächern und Räumen
-- Fachfarben werden direkt in der Darstellung übernommen
 
 ### Themes
-
-- Mehrere visuelle Themes verfügbar
-- Auswahl über die Einstellungsseite
-- Persistente Speicherung der Theme-Wahl in `config/theme.json`
+- Mehrere visuelle Themes
+- Auswahl direkt über die Einstellungen
+- Speicherung der Auswahl in `config/theme.json`
 
 ### Sicherheit
+- Passwortgeschützter Zugriff
+- Session-Schutz über einen geheimen `SECRET_KEY`
+- Keine Nutzung einer externen Cloud oder Datenbank
 
-- Passwortbasierter Login
-- Session-Schutz über `SECRET_KEY`
-- Kein Zugriff ohne erfolgreiche Anmeldung
-
----
-
-## Projektstruktur
-
-```
-HausaufgabenPlaner/
-├── app.py                    # Hauptanwendung (Flask, Datenbanklogik)
-├── requirements.txt          # Python-Abhängigkeiten
-├── .env                      # Passwort und Secret Key (nicht einchecken)
-├── .env.example              # Vorlage für die .env
-├── templates/                # HTML-Templates (Jinja2)
-├── static/                   # CSS und statische Dateien
-├── config/
-│   ├── subjects.json         # Fächer und Farben
-│   ├── timetable.json        # Stundenplan, Zeitraster, Unterrichtszuteilung
-│   └── theme.json            # Aktuell gewähltes Theme
-└── data/
-    └── hausaufgaben.db       # Lokale SQLite-Datenbank
-```
+### Mobile Nutzung
+- Responsive Oberfläche
+- Optimiert für Smartphone und Tablet
+- Funktioniert im Hoch- und Querformat
 
 ---
 
 ## Voraussetzungen
 
-- Python 3.11 oder neuer
+- **Python 3.11 oder neuer**
 - `pip`
 
-**Abhängigkeiten** (`requirements.txt`):
+Abhängigkeiten:
 
-```
+```txt
 Flask==3.0.3
 Werkzeug==3.0.3
 ```
@@ -104,145 +61,127 @@ Werkzeug==3.0.3
 
 ## Installation
 
+### 1. Repository klonen
+
 ```bash
-# 1. Repository klonen
 git clone https://github.com/JohannesDVos/HausaufgabenPlaner.git
 cd HausaufgabenPlaner
+```
 
-# 2. Abhängigkeiten installieren
+### 2. Abhängigkeiten installieren
+
+```bash
 pip install -r requirements.txt
+```
 
-# 3. Umgebungsdatei anlegen
+### 3. `.env` erstellen
+
+```bash
 cp .env.example .env
 ```
 
-Anschließend `.env` mit eigenen Werten befüllen (siehe [Konfiguration](#konfiguration)).
-
-```bash
-# 4. Anwendung starten
-python app.py
-```
-
-Die App ist danach unter `http://127.0.0.1:5000` erreichbar.
-
----
-
-## Konfiguration
-
-### Umgebungsvariablen (`.env`)
+Anschließend `.env` bearbeiten:
 
 ```env
 HAUSAUFGABEN_PASSWORD=dein-sicheres-passwort
 HAUSAUFGABEN_SECRET_KEY=ein-langer-zufaelliger-schluessel
 ```
 
-> **Hinweis:** Der `SECRET_KEY` schützt die Login-Session. Eine Änderung macht alle bestehenden Anmeldungen ungültig.
+> Die `.env` sollte **nicht in Git eingecheckt** werden.
 
-### Fächer (`config/subjects.json`)
-
-Fächer und ihre Anzeigefarben werden hier zentral gepflegt und in der gesamten App konsistent verwendet.
-
-### Stundenplan (`config/timetable.json`)
-
-Definiert das Stundenraster, die Wochentage sowie die Zuordnung von Fach, Stunde, Tag und Raum.
-
-### Theme (`config/theme.json`)
-
-Wird automatisch über die Einstellungsseite der App geschrieben. Kein manueller Eingriff erforderlich.
-
----
-
-## Deployment Beispiele
-
-### Lokaler Rechner
-
-Geeignet für Tests und den privaten Einsatz im Heimnetz.
+### 4. Anwendung starten
 
 ```bash
-git clone https://github.com/JohannesDVos/HausaufgabenPlaner.git
-cd HausaufgabenPlaner
-pip install -r requirements.txt
-cp .env.example .env
-# .env anpassen
 python app.py
 ```
 
-### Raspberry Pi (Dauerbetrieb)
+Anschließend ist die Anwendung normalerweise unter
 
-Der Raspberry Pi eignet sich besonders für den kontinuierlichen Betrieb: geringer Stromverbrauch, keine Cloud-Abhängigkeit, alle Daten bleiben im Heimnetz.
-
-**Voraussetzungen:**
-- Raspberry Pi OS
-- Python 3.11+, `pip`
-
-**Installation:**
-
-```bash
-# Projekt auf den Raspberry Pi kopieren
-git clone https://github.com/JohannesDVos/HausaufgabenPlaner.git /home/pi/HausaufgabenPlaner
-cd /home/pi/HausaufgabenPlaner
-
-# Virtuelle Umgebung anlegen und Abhängigkeiten installieren
-python3 -m venv .venv
-.venv/bin/pip install -r requirements.txt
-
-# Konfiguration anlegen
-cp .env.example .env
-# .env anpassen
+```text
+http://127.0.0.1:5000
 ```
 
-**Autostart mit systemd: NICHT GETESTET**
-
-Service-Datei unter `/etc/systemd/system/hausaufgabenplaner.service` ablegen:
-
-```ini
-[Unit]
-Description=HausaufgabenPlaner
-After=network.target
-
-[Service]
-WorkingDirectory=/home/pi/HausaufgabenPlaner
-ExecStart=/home/pi/HausaufgabenPlaner/.venv/bin/python /home/pi/HausaufgabenPlaner/app.py
-Restart=always
-User=pi
-
-[Install]
-WantedBy=multi-user.target
-```
-
-Dienst aktivieren und starten:
-
-```bash
-sudo systemctl daemon-reload
-sudo systemctl enable hausaufgabenplaner
-sudo systemctl start hausaufgabenplaner
-sudo systemctl status hausaufgabenplaner
-```
+erreichbar.
 
 ---
 
-## Mobile Nutzung
+## Konfiguration
 
-Die Oberfläche ist für die Nutzung auf iPhone und iPad optimiert:
+### Fächer
 
-- Responsives Layout für Hoch- und Querformat
-- Große Schaltflächen und klare Abstände
-- Kompakte Darstellung von Kalender und Stundenplan
+Die Fächer und ihre Farben werden in
+
+```text
+config/subjects.json
+```
+
+definiert.
+
+### Stundenplan
+
+Der Stundenplan wird in
+
+```text
+config/timetable.json
+```
+
+konfiguriert.
+
+Dort werden unter anderem Unterrichtszeiten, Wochentage, Fächer und Räume festgelegt.
+
+### Theme
+
+Das aktuell ausgewählte Theme wird in
+
+```text
+config/theme.json
+```
+
+gespeichert.
+
+Normalerweise muss diese Datei nicht manuell bearbeitet werden.
 
 ---
 
 ## Datensicherung
 
-Es wird empfohlen, folgende Dateien regelmäßig zu sichern:
+Für ein Backup sollten mindestens folgende Dateien gesichert werden:
 
 | Datei / Verzeichnis | Inhalt |
 |---|---|
-| `data/hausaufgaben.db` | Alle Aufgaben und Termine (SQLite) |
-| `config/` | Fächer, Stundenplan, Theme |
-| `.env` | Passwort und Secret Key – **separat und sicher aufbewahren** |
+| `data/hausaufgaben.db` | Aufgaben und Termine |
+| `config/` | Fächer, Stundenplan und Theme |
+| `.env` | Passwort und Secret Key |
+
+Die `.env` sollte **separat und sicher** aufbewahrt werden und niemals öffentlich in ein Repository gelangen.
+
+---
+
+## Projektstruktur
+
+```text
+HausaufgabenPlaner/
+├── app.py
+├── requirements.txt
+├── .env
+├── .env.example
+│
+├── templates/
+├── static/
+│
+├── config/
+│   ├── subjects.json
+│   ├── timetable.json
+│   └── theme.json
+│
+└── data/
+    └── hausaufgaben.db
+```
 
 ---
 
 ## Hinweis
 
-HausaufgabenPlaner ist bewusst als Single-User-Lösung ausgelegt und auf einfache Bedienung, lokale Datenhaltung und den privaten Einsatz optimiert. Es ist keine Mehrbenutzerverwaltung vorgesehen.
+HausaufgabenPlaner ist als **private Single-User-Anwendung** konzipiert. Es gibt keine Mehrbenutzerverwaltung und keine Cloud-Anbindung.
+
+Alle Daten bleiben standardmäßig auf dem Rechner bzw. Raspberry Pi, auf dem die Anwendung betrieben wird.
