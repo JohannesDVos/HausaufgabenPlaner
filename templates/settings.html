@@ -35,7 +35,7 @@
         <label class="theme-option">
           <input type="radio" name="theme" value="{{ name }}" {% if active_theme == name %}checked{% endif %}>
           <span class="theme-preview" data-preview="{{ name }}">
-            <strong>{{ name|capitalize }}</strong>
+            <strong>{{ name.replace("-", " ")|title }}</strong>
             <small>{{ theme.accent }}</small>
           </span>
         </label>

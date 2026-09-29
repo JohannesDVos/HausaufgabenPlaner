@@ -124,6 +124,19 @@ def theme_definitions() -> dict[str, dict[str, str]]:
             "danger": "#f87171",
             "shadow": "0 18px 48px rgba(0, 0, 0, 0.32)",
         },
+        "paper-dark": {
+            "bg": "#181614",
+            "surface": "rgba(38, 34, 30, 0.94)",
+            "surface_2": "rgba(50, 45, 40, 0.98)",
+            "text": "#f5eee5",
+            "muted": "#b8aa9b",
+            "line": "rgba(245, 238, 229, 0.16)",
+            "accent": "#f0b56b",
+            "accent_soft": "rgba(240, 181, 107, 0.16)",
+            "accent_text": "#3b2410",
+            "danger": "#f87171",
+            "shadow": "0 18px 48px rgba(0, 0, 0, 0.34)",
+        },
     }
 
 

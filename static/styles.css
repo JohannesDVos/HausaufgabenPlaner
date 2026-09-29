@@ -42,6 +42,25 @@
   --shadow: 0 18px 48px rgba(0, 0, 0, 0.3);
 }
 
+[data-theme="paper-dark"] {
+  --bg: #171614;
+  --surface: rgba(31, 30, 27, 0.94);
+  --surface-2: rgba(39, 38, 34, 0.98);
+
+  --text: #eeeae2;
+  --muted: #aaa59b;
+
+  --line: rgba(238, 234, 226, 0.11);
+
+  --accent: #2aa198;
+  --accent-soft: rgba(42, 161, 152, 0.14);
+  --accent-text: #f4fffd;
+
+  --danger: #ef6b6b;
+
+  --shadow: 0 18px 48px rgba(0, 0, 0, 0.34);
+}
+
 * { box-sizing: border-box; }
 
 html,
