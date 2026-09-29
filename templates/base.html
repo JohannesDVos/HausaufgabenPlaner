@@ -8,6 +8,11 @@
   <meta name="theme-color" content="{{ theme.accent if theme is defined else '#38bdf8' }}">
   <link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" type="image/svg+xml">
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css', v='20260929-1') }}">
+  <link rel="apple-touch-icon" href="/static/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="HausaufgabenPlaner">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="manifest" href="/static/manifest.json">
 </head>
 <body>
   <main class="shell">
