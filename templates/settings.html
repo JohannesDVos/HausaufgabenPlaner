@@ -15,15 +15,6 @@
   </div>
 </header>
 
-{% with messages = get_flashed_messages(with_categories=true) %}
-  {% if messages %}
-    <div class="alerts">
-      {% for category, message in messages %}
-        <div class="alert {{ category }}">{{ message }}</div>
-      {% endfor %}
-    </div>
-  {% endif %}
-{% endwith %}
 
 <section class="grid">
   <div class="panel panel-wide">
@@ -44,6 +35,16 @@
     </form>
   </div>
 </section>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="alerts">
+      {% for category, message in messages %}
+        <div class="alert {{ category }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
 <script>
   (function () {
     const form = document.querySelector(".theme-form");
