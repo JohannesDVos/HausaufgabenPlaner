@@ -42,12 +42,25 @@
         <input name="title" required>
       </label>
       <label class="field">Fach
-        <select name="subject" id="task-subject" required>
-          <option value="" selected disabled>Fach wählen</option>
-          {% for subject in subjects %}
-            <option value="{{ subject.name }}">{{ subject.name }}</option>
-          {% endfor %}
-        </select>
+        <div class="subject-picker" data-subject-picker>
+          <input type="hidden" name="subject" id="task-subject" required>
+          <button class="subject-picker-toggle" type="button" aria-haspopup="listbox" aria-expanded="false">
+            <span class="subject-picker-value">Fach wählen</span>
+            <span class="subject-picker-chevron" aria-hidden="true">⌄</span>
+          </button>
+          <div class="subject-picker-menu" role="listbox">
+            <input class="subject-picker-search" type="search" placeholder="Fach suchen…" aria-label="Fach suchen">
+            <div class="subject-picker-options">
+              {% for subject in subjects %}
+                <button class="subject-picker-option" type="button" role="option" data-value="{{ subject.name }}" data-color="{{ subject_colors.get(subject.name, '#64748b') }}">
+                  <span class="subject-picker-dot" style="background: {{ subject_colors.get(subject.name, '#64748b') }}"></span>
+                  <span>{{ subject.name }}</span>
+                </button>
+              {% endfor %}
+            </div>
+            <p class="subject-picker-empty" hidden>Kein Fach gefunden.</p>
+          </div>
+        </div>
       </label>
       <label class="field">Priorität
         <select name="priority">
@@ -77,11 +90,25 @@
         <input name="title" required>
       </label>
       <label class="field">Fach
-        <select name="subject" required>
-          {% for subject in subjects %}
-            <option value="{{ subject.name }}">{{ subject.name }}</option>
-          {% endfor %}
-        </select>
+        <div class="subject-picker" data-subject-picker>
+          <input type="hidden" name="subject" required>
+          <button class="subject-picker-toggle" type="button" aria-haspopup="listbox" aria-expanded="false">
+            <span class="subject-picker-value">Fach wählen</span>
+            <span class="subject-picker-chevron" aria-hidden="true">⌄</span>
+          </button>
+          <div class="subject-picker-menu" role="listbox">
+            <input class="subject-picker-search" type="search" placeholder="Fach suchen…" aria-label="Fach suchen">
+            <div class="subject-picker-options">
+              {% for subject in subjects %}
+                <button class="subject-picker-option" type="button" role="option" data-value="{{ subject.name }}" data-color="{{ subject_colors.get(subject.name, '#64748b') }}">
+                  <span class="subject-picker-dot" style="background: {{ subject_colors.get(subject.name, '#64748b') }}"></span>
+                  <span>{{ subject.name }}</span>
+                </button>
+              {% endfor %}
+            </div>
+            <p class="subject-picker-empty" hidden>Kein Fach gefunden.</p>
+          </div>
+        </div>
       </label>
       <label class="field">Datum
         <input type="date" name="event_date" required>
@@ -210,7 +237,82 @@
       }
     }
 
-    subjectSelect.addEventListener("change", updateDueDate);
+    document.querySelectorAll("[data-subject-picker]").forEach((picker) => {
+      const hiddenInput = picker.querySelector('input[type="hidden"]');
+      const toggle = picker.querySelector(".subject-picker-toggle");
+      const value = picker.querySelector(".subject-picker-value");
+      const search = picker.querySelector(".subject-picker-search");
+      const options = [...picker.querySelectorAll(".subject-picker-option")];
+      const empty = picker.querySelector(".subject-picker-empty");
+
+      function closePicker() {
+        picker.classList.remove("is-open");
+        toggle.setAttribute("aria-expanded", "false");
+      }
+
+      function filterOptions() {
+        const query = search.value.trim().toLocaleLowerCase();
+        let visibleOptions = 0;
+        options.forEach((option) => {
+          const subjectName = option.dataset.value.toLocaleLowerCase();
+          const matches = subjectName.includes(query);
+          option.hidden = !matches;
+          if (matches) visibleOptions += 1;
+        });
+        empty.hidden = visibleOptions > 0;
+      }
+
+      toggle.addEventListener("click", () => {
+        const isOpen = picker.classList.toggle("is-open");
+        toggle.setAttribute("aria-expanded", String(isOpen));
+        if (isOpen) {
+          search.value = "";
+          filterOptions();
+          search.focus();
+        }
+      });
+
+      search.addEventListener("input", filterOptions);
+      options.forEach((option) => {
+        option.addEventListener("click", () => {
+          hiddenInput.value = option.dataset.value;
+          value.textContent = option.dataset.value;
+          value.classList.add("has-selection");
+          value.style.setProperty("--subject-color", option.dataset.color);
+          options.forEach((item) => item.classList.toggle("is-selected", item === option));
+          closePicker();
+          if (hiddenInput === subjectSelect) updateDueDate();
+        });
+      });
+
+      picker.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          closePicker();
+          toggle.focus();
+        }
+      });
+    });
+
+    document.addEventListener("click", (event) => {
+      document.querySelectorAll("[data-subject-picker].is-open").forEach((picker) => {
+        if (!picker.contains(event.target)) {
+          picker.classList.remove("is-open");
+          picker.querySelector(".subject-picker-toggle").setAttribute("aria-expanded", "false");
+        }
+      });
+    });
+
+    document.querySelectorAll("[data-subject-picker]").forEach((picker) => {
+      const form = picker.closest("form");
+      const hiddenInput = picker.querySelector('input[type="hidden"]');
+      if (!form || !hiddenInput.hasAttribute("required")) return;
+      form.addEventListener("submit", (event) => {
+        if (hiddenInput.value) return;
+        event.preventDefault();
+        picker.querySelector(".subject-picker-toggle").focus();
+        picker.classList.add("is-open");
+      });
+    });
   })();
 </script>
 {% endblock %}
